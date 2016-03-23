@@ -1,0 +1,6 @@
+[package]
+name = "string_error"
+version = "0.1.0"
+authors = ["Wangshan Lu <wisagan@gmail.com>"]
+
+[dependencies]
