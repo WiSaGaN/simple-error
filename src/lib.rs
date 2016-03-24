@@ -1,3 +1,15 @@
+#![doc(html_logo_url = "https://www.rust-lang.org/logos/rust-logo-128x128-blk-v2.png",
+       html_favicon_url = "https://www.rust-lang.org/favicon.ico",
+       html_root_url = "https://doc.rust-lang.org/")]
+//! A simple error type backed by a string.
+//!
+//! This crate provides a `SimpleError` type, which implements `std::error::Error`. The underlying
+//! is a `String` as the error message.
+//!
+//! It should be used when all you care about is an error string.
+//!
+//! It should not be used when you want to programmatically handle the error.
+
 use std::fmt;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
