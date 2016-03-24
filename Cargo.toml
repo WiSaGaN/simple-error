@@ -1,5 +1,5 @@
 [package]
-name = "string_error"
+name = "simple-error"
 version = "0.1.0"
 authors = ["Wangshan Lu <wisagan@gmail.com>"]
 
