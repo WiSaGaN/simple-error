@@ -1,6 +1,6 @@
 #![doc(html_logo_url = "https://www.rust-lang.org/logos/rust-logo-128x128-blk-v2.png",
        html_favicon_url = "https://www.rust-lang.org/favicon.ico",
-       html_root_url = "https://doc.rust-lang.org/")]
+       html_root_url = "https://wisagan.github.io/simple-error/simple_error/")]
 //! A simple error type backed by a string.
 //!
 //! This crate provides a `SimpleError` type, which implements `std::error::Error`. The underlying

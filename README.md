@@ -6,6 +6,8 @@
 
 `simple-error` is `Rust` library that provides a simple `Error` type which is backed by a `String`. It is used when all you want about the error is an error string.
 
+[Documentation](https://wisagan.github.io/simple-error/simple_error/)
+
 ## Usage
 
 To use `simple-error`, first add this to your `Cargo.toml`:

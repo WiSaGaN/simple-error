@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["Wangshan Lu <wisagan@gmail.com>"]
 license = "MIT/Apache-2.0"
 readme = "README.md"
+documentation = "https://wisagan.github.io/simple-error/simple_error/"
 repository = "https://github.com/WiSaGaN/simple-error.git"
 description = """
 A simple Error type backed by a String
