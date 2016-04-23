@@ -59,6 +59,25 @@ impl SimpleError {
     pub fn from<T: std::error::Error>(t: T) -> SimpleError {
         SimpleError{ err: format!("{}", t) }
     }
+
+    /// Creates a new simple error from a string with another error.
+    ///
+    /// This function takes a string as error and a type that implements `std::error::Error` as
+    /// reason.
+    /// The error string will be the `Display` of the `std::error::Error` prefixed with the string
+    /// and ", ".
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use self::simple_error::SimpleError;
+    ///
+    /// let err = SimpleError::with("cannot turn on tv", SimpleError::new("remote not found"));
+    /// assert_eq!("cannot turn on tv, remote not found", format!("{}", err));
+    /// ```
+    pub fn with<T: std::error::Error>(e: &str, t: T) -> SimpleError {
+        SimpleError{ err: format!("{}, {}", e, t) }
+    }
 }
 
 // TODO: implement From<T> where T: std::error::Error when specialization lands, and remove
