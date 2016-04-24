@@ -2,7 +2,7 @@
 
 This project roughly adheres to [Semantic Versioning](http://semver.org/). For 0.x.y releases, `x` is the major version in semver, while `y` is the minor version.
 
-## Unpublished
+## 0.1.2 - 2016-04-24
 
 * Add SimpleError::with
 
