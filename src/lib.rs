@@ -75,8 +75,8 @@ impl SimpleError {
     /// let err = SimpleError::with("cannot turn on tv", SimpleError::new("remote not found"));
     /// assert_eq!("cannot turn on tv, remote not found", format!("{}", err));
     /// ```
-    pub fn with<T: std::error::Error>(e: &str, t: T) -> SimpleError {
-        SimpleError{ err: format!("{}, {}", e, t) }
+    pub fn with<T: std::error::Error>(s: &str, t: T) -> SimpleError {
+        SimpleError{ err: format!("{}, {}", s, t) }
     }
 }
 
