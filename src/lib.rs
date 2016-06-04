@@ -103,6 +103,8 @@ impl std::error::Error for SimpleError {
 /// # Examples
 ///
 /// ```
+/// # #[macro_use] extern crate simple_error;
+/// # fn main() {
 /// use self::simple_error::SimpleError;
 ///
 /// fn try_block(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
@@ -111,14 +113,15 @@ impl std::error::Error for SimpleError {
 ///
 /// // Above is equivalent to below.
 ///
-/// fn try_block(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
+/// fn try_block_equivalent(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
 ///     match result {
 ///         Ok(v) => Ok(v),
 ///         Err(e) => {
-///             return Err(SimpleError::with(s, e);
+///             return Err(SimpleError::with(s, e));
 ///         },
 ///     }
 /// }
+/// # }
 /// ```
 #[macro_export]
 macro_rules! try_with {
