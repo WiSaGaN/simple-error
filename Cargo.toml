@@ -7,7 +7,7 @@ readme = "README.md"
 documentation = "https://wisagan.github.io/simple-error/simple_error/"
 repository = "https://github.com/WiSaGaN/simple-error.git"
 description = """
-A simple Error type backed by a String
+A simple error type backed by a string
 """
 keywords = ["error", "simple-error"]
 
