@@ -109,7 +109,7 @@ impl std::error::Error for SimpleError {
 ///     Ok(try_with!(result, s))
 /// }
 ///
-/// Above is equivalent to below.
+/// // Above is equivalent to below.
 ///
 /// fn try_block(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
 ///     match result {
