@@ -95,6 +95,41 @@ impl std::error::Error for SimpleError {
     }
 }
 
+/// Helper macro for unwrapping `Result` values while returning early with a
+/// newly constructed `SimpleError` if the value of the expression is `Err`.
+/// Can only be used in functions that return `Result<_, SimpleError>`.
+///
+///
+/// # Examples
+///
+/// ```
+/// use self::simple_error::SimpleError;
+///
+/// fn try_block(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
+///     Ok(try_with!(result, s))
+/// }
+///
+/// Above is equivalent to below.
+///
+/// fn try_block(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
+///     match result {
+///         Ok(v) => Ok(v),
+///         Err(e) => {
+///             return Err(SimpleError::with(s, e);
+///         },
+///     }
+/// }
+/// ```
+#[macro_export]
+macro_rules! try_with {
+    ($expr: expr, $str: expr) => (match $expr {
+        Ok(val) => val,
+        Err(err) => {
+            return Err(SimpleError::with($str, err));
+        },
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::SimpleError;
@@ -118,5 +153,15 @@ mod tests {
     fn from_io_error() {
         let err = SimpleError::from(io::Error::new(io::ErrorKind::Other, "oh no"));
         assert_eq!("oh no", format!("{}", err));
+    }
+
+    fn try_block(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
+        Ok(try_with!(result, s))
+    }
+
+    #[test]
+    fn macro_try_with() {
+        assert_eq!(Ok(()), try_block(Ok(()), ""));
+        assert_eq!(Err(SimpleError::new("try block error, error foo")), try_block(Err(SimpleError::new("error foo")), "try block error"));
     }
 }
