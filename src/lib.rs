@@ -37,6 +37,7 @@ impl SimpleError {
     /// // errors can also be created from `String`
     /// let err = SimpleError::new(String::from("an error from String"));
     /// ```
+    #[inline]
     pub fn new<T: Into<String>>(t: T) -> SimpleError {
         SimpleError{ err: t.into() }
     }
@@ -56,6 +57,7 @@ impl SimpleError {
     /// let err = SimpleError::from(io::Error::new(io::ErrorKind::Other, "oh no"));
     /// assert_eq!("oh no", format!("{}", err));
     /// ```
+    #[inline]
     pub fn from<T: std::error::Error>(t: T) -> SimpleError {
         SimpleError{ err: format!("{}", t) }
     }
@@ -75,6 +77,7 @@ impl SimpleError {
     /// let err = SimpleError::with("cannot turn on tv", SimpleError::new("remote not found"));
     /// assert_eq!("cannot turn on tv, remote not found", format!("{}", err));
     /// ```
+    #[inline]
     pub fn with<T: std::error::Error>(s: &str, t: T) -> SimpleError {
         SimpleError{ err: format!("{}, {}", s, t) }
     }
@@ -84,12 +87,14 @@ impl SimpleError {
 // inherent from function.
 
 impl fmt::Display for SimpleError {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.err.fmt(f)
     }
 }
 
 impl std::error::Error for SimpleError {
+    #[inline]
     fn description(&self) -> &str {
         &self.err
     }
