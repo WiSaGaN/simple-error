@@ -1,10 +1,10 @@
 [package]
 name = "simple-error"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["Wangshan Lu <wisagan@gmail.com>"]
 license = "MIT/Apache-2.0"
 readme = "README.md"
-documentation = "https://wisagan.github.io/simple-error/simple_error/"
+documentation = "https://docs.rs/simple-error/"
 repository = "https://github.com/WiSaGaN/simple-error.git"
 description = """
 A simple error type backed by a string
