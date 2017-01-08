@@ -133,7 +133,7 @@ macro_rules! try_with {
     ($expr: expr, $str: expr) => (match $expr {
         Ok(val) => val,
         Err(err) => {
-            return Err(SimpleError::with($str, err));
+            return Err(SimpleError::with($str.as_ref(), err));
         },
     })
 }
