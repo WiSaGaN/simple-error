@@ -138,6 +138,44 @@ macro_rules! try_with {
     })
 }
 
+/// Helper macro for unwrapping `Option` values while returning early with a
+/// newly constructed `SimpleError` if the value of the expression is `None`.
+/// Can only be used in functions that return `Result<_, SimpleError>`.
+///
+///
+/// # Examples
+///
+/// ```
+/// # #[macro_use] extern crate simple_error;
+/// # fn main() {
+/// use self::simple_error::SimpleError;
+///
+/// fn try_block(maybe: Option<()>, s: &str) -> Result<(), SimpleError> {
+///     Ok(require_with!(maybe, s))
+/// }
+///
+/// // Above is equivalent to below.
+///
+/// fn try_block_equivalent(maybe: Option<()>, s: &str) -> Result<(), SimpleError> {
+///     match maybe {
+///         Some(v) => Ok(v),
+///         None => {
+///             return Err(SimpleError::new(s));
+///         },
+///     }
+/// }
+/// # }
+/// ```
+#[macro_export]
+macro_rules! require_with {
+    ($expr: expr, $str: expr) => (match $expr {
+        Some(val) => val,
+        None => {
+            return Err(SimpleError::new($str.as_ref()));
+        },
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::SimpleError;
