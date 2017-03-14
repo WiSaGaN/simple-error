@@ -100,6 +100,9 @@ impl std::error::Error for SimpleError {
     }
 }
 
+/// Result type in which the error is a simple error
+pub type SimpleResult<T> = Result<T, SimpleError>;
+
 /// Helper macro for unwrapping `Result` values while returning early with a
 /// newly constructed `SimpleError` if the value of the expression is `Err`.
 /// Can only be used in functions that return `Result<_, SimpleError>`.
