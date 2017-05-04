@@ -153,13 +153,13 @@ macro_rules! try_with {
 /// # fn main() {
 /// use self::simple_error::SimpleError;
 ///
-/// fn try_block(maybe: Option<()>, s: &str) -> Result<(), SimpleError> {
+/// fn require_block(maybe: Option<()>, s: &str) -> Result<(), SimpleError> {
 ///     Ok(require_with!(maybe, s))
 /// }
 ///
 /// // Above is equivalent to below.
 ///
-/// fn try_block_equivalent(maybe: Option<()>, s: &str) -> Result<(), SimpleError> {
+/// fn require_block_equivalent(maybe: Option<()>, s: &str) -> Result<(), SimpleError> {
 ///     match maybe {
 ///         Some(v) => Ok(v),
 ///         None => {
@@ -212,5 +212,15 @@ mod tests {
     fn macro_try_with() {
         assert_eq!(Ok(()), try_block(Ok(()), ""));
         assert_eq!(Err(SimpleError::new("try block error, error foo")), try_block(Err(SimpleError::new("error foo")), "try block error"));
+    }
+
+    fn require_block(option: Option<()>, s: &str) -> Result<(), SimpleError> {
+        Ok(require_with!(option, s))
+    }
+
+    #[test]
+    fn macro_require_with() {
+        assert_eq!(Ok(()), require_block(Some(()), ""));
+        assert_eq!(Err(SimpleError::new("require block error")), require_block(None, "require block error"));
     }
 }
