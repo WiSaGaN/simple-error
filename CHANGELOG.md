@@ -1,6 +1,11 @@
 # Changelog
 
 This project roughly adheres to [Semantic Versioning](http://semver.org/). For 0.x.y releases, `x` is the major version in semver, while `y` is the minor version.
+
+## 0.1.8 - 2017-05-04
+
+* Add `bail` macro
+
 ## 0.1.7 - 2017-03-14
 
 * Add `SimpleResult`

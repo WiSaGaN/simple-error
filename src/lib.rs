@@ -179,11 +179,58 @@ macro_rules! require_with {
     })
 }
 
+/// Helper macro for returning a `SimpleError` constructed from either a `Into<SimpleError>` or a
+/// formatted string.
+///
+/// # Examples
+///
+/// ```
+/// # #[macro_use] extern crate simple_error;
+/// # fn main() {
+/// use self::simple_error::SimpleError;
+/// // Use with a `Into<SimpleError>`
+///
+/// struct ErrorSeed;
+///
+/// impl From<ErrorSeed> for SimpleError {
+///     fn from(_: ErrorSeed) -> SimpleError {
+///         SimpleError::new(".")
+///     }
+/// }
+///
+/// fn bail_block_into(es: ErrorSeed) -> Result<(), SimpleError> {
+///     bail!(es);
+/// }
+///
+/// // Use with a formatted string
+/// fn bail_block_format(s: &str) -> Result<(), SimpleError> {
+///     bail!("reason: {}", s);
+/// }
+/// # }
+/// ```
+#[macro_export]
+macro_rules! bail {
+    ($e:expr) => {
+        return Err($e.into());
+    };
+    ($fmt:expr, $($arg:tt)+) => {
+        return Err(SimpleError::new(format!($fmt, $($arg)+)));
+    };
+}
+
 #[cfg(test)]
 mod tests {
     use super::SimpleError;
     use std::error::Error;
     use std::io;
+
+    struct ErrorSeed;
+
+    impl From<ErrorSeed> for SimpleError {
+        fn from(_: ErrorSeed) -> SimpleError {
+            SimpleError::new(".")
+        }
+    }
 
     #[test]
     fn new_from_string() {
@@ -222,5 +269,19 @@ mod tests {
     fn macro_require_with() {
         assert_eq!(Ok(()), require_block(Some(()), ""));
         assert_eq!(Err(SimpleError::new("require block error")), require_block(None, "require block error"));
+    }
+
+    fn bail_block_into(es: ErrorSeed) -> Result<(), SimpleError> {
+        bail!(es);
+    }
+
+    fn bail_block_format(s: &str) -> Result<(), SimpleError> {
+        bail!("reason: {}", s);
+    }
+
+    #[test]
+    fn macro_bail() {
+        assert_eq!(Err(SimpleError::new(".")), bail_block_into(ErrorSeed));
+        assert_eq!(Err(SimpleError::new("reason: plane crashed")), bail_block_format("plane crashed"));
     }
 }
