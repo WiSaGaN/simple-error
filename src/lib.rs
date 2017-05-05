@@ -86,6 +86,13 @@ impl SimpleError {
 // TODO: implement From<T> where T: std::error::Error when specialization lands, and remove
 // inherent from function.
 
+impl<'a> From<&'a str> for SimpleError {
+    #[inline]
+    fn from(s: &str) -> SimpleError {
+        SimpleError{ err: s.into() }
+    }
+}
+
 impl fmt::Display for SimpleError {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -179,8 +186,8 @@ macro_rules! require_with {
     })
 }
 
-/// Helper macro for returning a `SimpleError` constructed from either a `Into<SimpleError>` or a
-/// formatted string.
+/// Helper macro for returning a `SimpleError` constructed from either a `Into<SimpleError>`, a
+/// string slice, or a formatted string.
 ///
 /// # Examples
 ///
@@ -200,6 +207,11 @@ macro_rules! require_with {
 ///
 /// fn bail_block_into(es: ErrorSeed) -> Result<(), SimpleError> {
 ///     bail!(es);
+/// }
+///
+/// // Use with a string slice
+/// fn bail_block_str(s: &str) -> Result<(), SimpleError> {
+///     bail!(s);
 /// }
 ///
 /// // Use with a formatted string
@@ -275,6 +287,10 @@ mod tests {
         bail!(es);
     }
 
+    fn bail_block_str(s: &str) -> Result<(), SimpleError> {
+        bail!(s);
+    }
+
     fn bail_block_format(s: &str) -> Result<(), SimpleError> {
         bail!("reason: {}", s);
     }
@@ -282,6 +298,7 @@ mod tests {
     #[test]
     fn macro_bail() {
         assert_eq!(Err(SimpleError::new(".")), bail_block_into(ErrorSeed));
+        assert_eq!(Err(SimpleError::new("no reason")), bail_block_str("no reason"));
         assert_eq!(Err(SimpleError::new("reason: plane crashed")), bail_block_format("plane crashed"));
     }
 }
