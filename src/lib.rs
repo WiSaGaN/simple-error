@@ -224,7 +224,7 @@ mod tests {
     use std::error::Error;
     use std::io;
 
-    struct ErrorSeed;
+    pub struct ErrorSeed;
 
     impl From<ErrorSeed> for SimpleError {
         fn from(_: ErrorSeed) -> SimpleError {
