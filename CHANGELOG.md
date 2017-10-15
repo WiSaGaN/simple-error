@@ -2,6 +2,10 @@
 
 This project roughly adheres to [Semantic Versioning](http://semver.org/). For 0.x.y releases, `x` is the major version in semver, while `y` is the minor version.
 
+## 0.1.10 - 2017-10-15
+
+* Add `as_str`
+
 ## 0.1.9 - 2017-05-05
 
 * Support `bail` macro with string slice

@@ -81,6 +81,21 @@ impl SimpleError {
     pub fn with<T: std::error::Error>(s: &str, t: T) -> SimpleError {
         SimpleError{ err: format!("{}, {}", s, t) }
     }
+
+    /// Extracts a string slice describing the error.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use self::simple_error::SimpleError;
+    ///
+    /// let s = SimpleError::new("critical error");
+    /// assert_eq!("critical error", s.as_str());
+    /// ```
+    #[inline]
+    pub fn as_str(&self) -> &str {
+        &self.err
+    }
 }
 
 // TODO: implement From<T> where T: std::error::Error when specialization lands, and remove
