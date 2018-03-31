@@ -189,6 +189,12 @@ macro_rules! try_with {
 ///         },
 ///     }
 /// }
+///
+/// // Use a format string
+///
+/// fn require_block_format(maybe: Option<()>, s: &str) -> Result<(), SimpleError> {
+///     Ok(require_with!(maybe, "with {}", s))
+/// }
 /// # }
 /// ```
 #[macro_export]
@@ -198,7 +204,13 @@ macro_rules! require_with {
         None => {
             return Err(SimpleError::new($str.as_ref()));
         },
-    })
+    });
+    ($expr: expr, $fmt:expr, $($arg:tt)+) => (match $expr {
+        Some(val) => val,
+        None => {
+            return Err(SimpleError::new(format!($fmt, $($arg)+)));
+        },
+    });
 }
 
 /// Helper macro for returning a `SimpleError` constructed from either a `Into<SimpleError>`, a
@@ -292,10 +304,15 @@ mod tests {
         Ok(require_with!(option, s))
     }
 
+    fn require_block_format(maybe: Option<()>, s: &str) -> Result<(), SimpleError> {
+        Ok(require_with!(maybe, "with {}", s))
+    }
+
     #[test]
     fn macro_require_with() {
         assert_eq!(Ok(()), require_block(Some(()), ""));
         assert_eq!(Err(SimpleError::new("require block error")), require_block(None, "require block error"));
+        assert_eq!(Err(SimpleError::new("with require block error")), require_block_format(None, "require block error"));
     }
 
     fn bail_block_into(es: ErrorSeed) -> Result<(), SimpleError> {
