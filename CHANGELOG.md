@@ -2,6 +2,10 @@
 
 This project roughly adheres to [Semantic Versioning](http://semver.org/). For 0.x.y releases, `x` is the major version in semver, while `y` is the minor version.
 
+## 0.1.11 - 2018-03-31
+
+* Support format string in `try_with` and `require_with`
+
 ## 0.1.10 - 2017-10-15
 
 * Add `as_str`

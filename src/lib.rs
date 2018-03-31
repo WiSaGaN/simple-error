@@ -151,6 +151,12 @@ pub type SimpleResult<T> = Result<T, SimpleError>;
 ///         },
 ///     }
 /// }
+///
+/// // Use a format string
+///
+/// fn try_block_format(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
+///     Ok(try_with!(result, "with {}", s))
+/// }
 /// # }
 /// ```
 #[macro_export]
@@ -160,7 +166,13 @@ macro_rules! try_with {
         Err(err) => {
             return Err(SimpleError::with($str.as_ref(), err));
         },
-    })
+    });
+    ($expr: expr, $fmt:expr, $($arg:tt)+) => (match $expr {
+        Ok(val) => val,
+        Err(err) => {
+            return Err(SimpleError::with(&format!($fmt, $($arg)+), err));
+        },
+    });
 }
 
 /// Helper macro for unwrapping `Option` values while returning early with a
@@ -294,10 +306,15 @@ mod tests {
         Ok(try_with!(result, s))
     }
 
+    fn try_block_format(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
+        Ok(try_with!(result, "with {}", s))
+    }
+
     #[test]
     fn macro_try_with() {
         assert_eq!(Ok(()), try_block(Ok(()), ""));
         assert_eq!(Err(SimpleError::new("try block error, error foo")), try_block(Err(SimpleError::new("error foo")), "try block error"));
+        assert_eq!(Err(SimpleError::new("with try block error, error foo")), try_block_format(Err(SimpleError::new("error foo")), "try block error"));
     }
 
     fn require_block(option: Option<()>, s: &str) -> Result<(), SimpleError> {
