@@ -164,13 +164,13 @@ macro_rules! try_with {
     ($expr: expr, $str: expr) => (match $expr {
         Ok(val) => val,
         Err(err) => {
-            return Err(SimpleError::with($str.as_ref(), err));
+            return Err($crate::SimpleError::with($str.as_ref(), err));
         },
     });
     ($expr: expr, $fmt:expr, $($arg:tt)+) => (match $expr {
         Ok(val) => val,
         Err(err) => {
-            return Err(SimpleError::with(&format!($fmt, $($arg)+), err));
+            return Err($crate::SimpleError::with(&format!($fmt, $($arg)+), err));
         },
     });
 }
@@ -214,13 +214,13 @@ macro_rules! require_with {
     ($expr: expr, $str: expr) => (match $expr {
         Some(val) => val,
         None => {
-            return Err(SimpleError::new($str.as_ref()));
+            return Err($crate::SimpleError::new($str.as_ref()));
         },
     });
     ($expr: expr, $fmt:expr, $($arg:tt)+) => (match $expr {
         Some(val) => val,
         None => {
-            return Err(SimpleError::new(format!($fmt, $($arg)+)));
+            return Err($crate::SimpleError::new(format!($fmt, $($arg)+)));
         },
     });
 }
@@ -265,7 +265,7 @@ macro_rules! bail {
         return Err($e.into());
     };
     ($fmt:expr, $($arg:tt)+) => {
-        return Err(SimpleError::new(format!($fmt, $($arg)+)));
+        return Err($crate::SimpleError::new(format!($fmt, $($arg)+)));
     };
 }
 
