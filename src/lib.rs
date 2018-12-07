@@ -136,6 +136,7 @@ pub type SimpleResult<T> = Result<T, SimpleError>;
 /// # #[macro_use] extern crate simple_error;
 /// # fn main() {
 /// use self::simple_error::SimpleError;
+/// use std::error::Error;
 ///
 /// fn try_block(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
 ///     Ok(try_with!(result, s))
@@ -157,6 +158,12 @@ pub type SimpleResult<T> = Result<T, SimpleError>;
 /// fn try_block_format(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
 ///     Ok(try_with!(result, "with {}", s))
 /// }
+///
+/// // Use a format string to a boxed error
+///
+/// fn try_block_format_to_box_error(result: Result<(), SimpleError>, s: &str) -> Result<(), Box<Error>> {
+///     Ok(try_with!(result, "with {}", s))
+/// }
 /// # }
 /// ```
 #[macro_export]
@@ -164,13 +171,13 @@ macro_rules! try_with {
     ($expr: expr, $str: expr) => (match $expr {
         Ok(val) => val,
         Err(err) => {
-            return Err($crate::SimpleError::with($str.as_ref(), err));
+            return Err(::std::convert::From::from($crate::SimpleError::with($str.as_ref(), err)));
         },
     });
     ($expr: expr, $fmt:expr, $($arg:tt)+) => (match $expr {
         Ok(val) => val,
         Err(err) => {
-            return Err($crate::SimpleError::with(&format!($fmt, $($arg)+), err));
+            return Err(::std::convert::From::from($crate::SimpleError::with(&format!($fmt, $($arg)+), err)));
         },
     });
 }
@@ -186,6 +193,7 @@ macro_rules! try_with {
 /// # #[macro_use] extern crate simple_error;
 /// # fn main() {
 /// use self::simple_error::SimpleError;
+/// use std::error::Error;
 ///
 /// fn require_block(maybe: Option<()>, s: &str) -> Result<(), SimpleError> {
 ///     Ok(require_with!(maybe, s))
@@ -207,6 +215,12 @@ macro_rules! try_with {
 /// fn require_block_format(maybe: Option<()>, s: &str) -> Result<(), SimpleError> {
 ///     Ok(require_with!(maybe, "with {}", s))
 /// }
+///
+/// // Use a format string to a boxed error
+///
+/// fn require_block_format_to_box_error(maybe: Option<()>, s: &str) -> Result<(), Box<Error>> {
+///     Ok(require_with!(maybe, "with {}", s))
+/// }
 /// # }
 /// ```
 #[macro_export]
@@ -214,13 +228,13 @@ macro_rules! require_with {
     ($expr: expr, $str: expr) => (match $expr {
         Some(val) => val,
         None => {
-            return Err($crate::SimpleError::new($str.as_ref()));
+            return Err(::std::convert::From::from($crate::SimpleError::new($str.as_ref())));
         },
     });
     ($expr: expr, $fmt:expr, $($arg:tt)+) => (match $expr {
         Some(val) => val,
         None => {
-            return Err($crate::SimpleError::new(format!($fmt, $($arg)+)));
+            return Err(::std::convert::From::from($crate::SimpleError::new(format!($fmt, $($arg)+))));
         },
     });
 }
@@ -234,6 +248,7 @@ macro_rules! require_with {
 /// # #[macro_use] extern crate simple_error;
 /// # fn main() {
 /// use self::simple_error::SimpleError;
+/// use std::error::Error;
 /// // Use with a `Into<SimpleError>`
 ///
 /// struct ErrorSeed;
@@ -257,15 +272,20 @@ macro_rules! require_with {
 /// fn bail_block_format(s: &str) -> Result<(), SimpleError> {
 ///     bail!("reason: {}", s);
 /// }
+///
+/// // Use with a formatted string to a boxed error
+/// fn bail_block_format_to_box_error(s: &str) -> Result<(), Box<Error>> {
+///     bail!("reason: {}", s);
+/// }
 /// # }
 /// ```
 #[macro_export]
 macro_rules! bail {
     ($e:expr) => {
-        return Err($e.into());
+        return Err(::std::convert::From::from($e));
     };
     ($fmt:expr, $($arg:tt)+) => {
-        return Err($crate::SimpleError::new(format!($fmt, $($arg)+)));
+        return Err(::std::convert::From::from($crate::SimpleError::new(format!($fmt, $($arg)+))));
     };
 }
 
@@ -344,10 +364,15 @@ mod tests {
         bail!("reason: {}", s);
     }
 
+    fn bail_block_format_to_box_error(s: &str) -> Result<(), Box<Error>> {
+        bail!("reason: {}", s);
+    }
+
     #[test]
     fn macro_bail() {
         assert_eq!(Err(SimpleError::new(".")), bail_block_into(ErrorSeed));
         assert_eq!(Err(SimpleError::new("no reason")), bail_block_str("no reason"));
         assert_eq!(Err(SimpleError::new("reason: plane crashed")), bail_block_format("plane crashed"));
+        assert!(bail_block_format_to_box_error("plane crashed").is_err());
     }
 }

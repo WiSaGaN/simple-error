@@ -3,6 +3,10 @@
 This project roughly adheres to [Semantic Versioning](http://semver.org/). For 0.x.y releases, `x` is the major version in semver, while `y` is the minor version.
 
 
+## 0.1.13 - 2018-12-07
+
+* Make `try_with`, `require_with` and `bail` work more consistent with `try`
+
 ## 0.1.12 - 2018-10-11
 
 * Make `try_with`, `require_with` and `bail` work without requiring `using simple_error::SimpleError`
