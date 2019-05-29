@@ -3,9 +3,11 @@
 This project roughly adheres to [Semantic Versioning](http://semver.org/). For 0.x.y releases, `x` is the major version in semver, while `y` is the minor version.
 
 
-## 0.1.13 - 2018-12-07
+## 0.1.13 - 2018-12-07 (yanked)
 
 * Make `try_with`, `require_with` and `bail` work more consistent with `try`
+
+This version has been yanked due to breaking compatibility to 0.1.12. It will be republished as 0.2.0.
 
 ## 0.1.12 - 2018-10-11
 
