@@ -1,6 +1,6 @@
 [package]
 name = "simple-error"
-version = "0.1.13"
+version = "0.2.0"
 authors = ["Wangshan Lu <wisagan@gmail.com>"]
 license = "MIT/Apache-2.0"
 readme = "README.md"
