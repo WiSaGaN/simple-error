@@ -228,7 +228,7 @@ macro_rules! require_with {
     ($expr: expr, $str: expr) => (match $expr {
         Some(val) => val,
         None => {
-            return Err(::std::convert::From::from($crate::SimpleError::new($str.as_ref())));
+            return Err(::std::convert::From::from($crate::SimpleError::new($str)));
         },
     });
     ($expr: expr, $fmt:expr, $($arg:tt)+) => (match $expr {
