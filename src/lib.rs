@@ -341,6 +341,10 @@ mod tests {
         Ok(require_with!(option, s))
     }
 
+    fn require_block_str_as_ref(option: Option<()>, s: &String) -> Result<(), SimpleError> {
+        Ok(require_with!(option, s))
+    }
+
     fn require_block_format(maybe: Option<()>, s: &str) -> Result<(), SimpleError> {
         Ok(require_with!(maybe, "with {}", s))
     }
@@ -349,6 +353,7 @@ mod tests {
     fn macro_require_with() {
         assert_eq!(Ok(()), require_block(Some(()), ""));
         assert_eq!(Err(SimpleError::new("require block error")), require_block(None, "require block error"));
+        assert_eq!(Err(SimpleError::new("require block error")), require_block_str_as_ref(None, &"require block error".to_owned()));
         assert_eq!(Err(SimpleError::new("with require block error")), require_block_format(None, "require block error"));
     }
 
