@@ -66,8 +66,9 @@ fn study() -> Result<(), SimpleError> {
 }
 
 fn run() -> Result<(), SimpleError> {
-    try!(study(), "cannot study");
-    try!(watch_tv(), "cannot watch tv")
+    try_with!(study(), "cannot study");
+    try_with!(watch_tv(), "cannot watch tv");
+    Ok(())
 }
 
 fn main() {
