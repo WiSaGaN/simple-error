@@ -23,6 +23,8 @@ Then add this to your crate root:
 ```rust
 #[macro_use]
 extern crate simple_error;
+
+use simple_error::SimpleError;
 ```
 
 Now you can use `simple-error` in different ways:
@@ -66,12 +68,13 @@ fn study() -> Result<(), SimpleError> {
 }
 
 fn run() -> Result<(), SimpleError> {
-    try!(study(), "cannot study");
-    try!(watch_tv(), "cannot watch tv")
+    try_with!(study(), "cannot study");
+    try_with!(watch_tv(), "cannot watch tv");
+    Ok(())
 }
 
 fn main() {
-    if Err(e) = run() {
+    if let Err(e) = run() {
         println!("{}", e);
     }
 }
