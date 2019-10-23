@@ -39,7 +39,7 @@ You can use it to replace all error types if you only care about a string descri
 
 ```rust
 fn do_bar() -> Result<(), SimpleError> {
-    SimpleError::from(std::io::Error(io::ErrorKind::Other, "oh no"))
+    SimpleError::from(std::io::Error::new(std::io::ErrorKind::Other, "oh no"))
 }
 ```
 
