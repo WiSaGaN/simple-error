@@ -23,6 +23,8 @@ Then add this to your crate root:
 ```rust
 #[macro_use]
 extern crate simple_error;
+
+use simple_error::SimpleError;
 ```
 
 Now you can use `simple-error` in different ways:
