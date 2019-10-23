@@ -31,7 +31,7 @@ You can use it simply as a string error type:
 
 ```rust
 fn do_foo() -> Result<(), SimpleError> {
-    SimpleError::new("cannot do foo")
+    Err(SimpleError::new("cannot do foo"))
 }
 ```
 
@@ -39,7 +39,7 @@ You can use it to replace all error types if you only care about a string descri
 
 ```rust
 fn do_bar() -> Result<(), SimpleError> {
-    SimpleError::from(std::io::Error(io::ErrorKind::Other, "oh no"))
+    Err(SimpleError::from(std::io::Error(io::ErrorKind::Other, "oh no")))
 }
 ```
 
