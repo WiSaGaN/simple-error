@@ -71,7 +71,7 @@ fn run() -> Result<(), SimpleError> {
 }
 
 fn main() {
-    if Err(e) = run() {
+    if let Err(e) = run() {
         println!("{}", e);
     }
 }
