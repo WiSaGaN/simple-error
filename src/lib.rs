@@ -289,6 +289,39 @@ macro_rules! bail {
     };
 }
 
+/// Construct an ad-hoc `SimpleError` from a string.
+///
+/// It can take either just a string, or a format string with arguments.
+///
+/// # Example
+///
+/// ```
+/// # #[macro_use] extern crate simple_error;
+/// # fn main() {
+/// use self::simple_error::SimpleResult;
+///
+/// fn add_reason(r: Result<(), ()>) -> SimpleResult<()> {
+///     // Use with a string slice
+///     r.map_err(|_| simple_error!("no reason"))
+/// }
+///
+/// fn add_reason_with_str(r: Result<(), ()>, s: &str) -> SimpleResult<()> {
+///     // Use with a formatted string
+///     r.map_err(|_| simple_error!("reason: {}", s))
+/// }
+/// # }
+/// ```
+#[macro_export]
+macro_rules! simple_error {
+    ($e:expr) => {
+        $crate::SimpleError::new($e)
+    };
+    ($fmt:expr, $($arg:tt)+) => {
+        $crate::SimpleError::new(format!($fmt, $($arg)+))
+    };
+}
+
+
 #[cfg(test)]
 mod tests {
     use super::SimpleError;

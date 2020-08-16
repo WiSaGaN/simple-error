@@ -2,6 +2,10 @@
 
 This project roughly adheres to [Semantic Versioning](http://semver.org/). For 0.x.y releases, `x` is the major version in semver, while `y` is the minor version.
 
+## 0.2.2 - 2020-08-16
+
+* Support constructing from format string using `simple_error` macro
+
 ## 0.2.1 - 2019-07-03
 
 * Fix 1.36.0 inference breakage
