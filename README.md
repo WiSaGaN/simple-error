@@ -28,7 +28,7 @@ extern crate simple_error;
 use simple_error::SimpleError;
 ```
 
-Or you can skip the `extern crate` and just import relevant items you use if you are on 2018 edition or beyong.
+Or you can skip the `extern crate` and just import relevant items you use if you are on 2018 edition or beyond.
 
 Now you can use `simple-error` in different ways:
 
