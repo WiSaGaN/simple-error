@@ -321,6 +321,38 @@ macro_rules! simple_error {
     };
 }
 
+/// Map a result type error to simple error with format
+///
+/// It can take either just a string, or a format string with arguments.
+///
+/// # Example
+///
+/// ```
+/// # #[macro_use] extern crate simple_error;
+/// # fn main() {
+/// use self::simple_error::SimpleResult;
+///
+/// fn map_err_with_reason(r: Result<(), std::io::Error>) -> SimpleResult<()> {
+///     // Use with a string slice
+///     map_err_with!(r, "no reason")
+/// }
+///
+/// fn map_err_with_reason_with_str(r: Result<(), std::io::Error>, s: &str) -> SimpleResult<()> {
+///     // Use with a formatted string
+///     map_err_with!(r, "no reason: {}", s)
+/// }
+/// # }
+/// ```
+#[macro_export]
+macro_rules! map_err_with {
+    ($r: expr, $str: expr) => {
+        $r.map_err(|e| $crate::SimpleError::with($str.as_ref(), e))
+    };
+    ($r: expr, $fmt:expr, $($arg:tt)+) => {
+        $r.map_err(|e| $crate::SimpleError::with(&format!($fmt, $($arg)+), e))
+    };
+}
+
 
 #[cfg(test)]
 mod tests {
