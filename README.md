@@ -4,7 +4,7 @@
 [![Documentation](https://docs.rs/simple-error/badge.svg)](https://docs.rs/simple-error/)
 [![Build Status](https://travis-ci.org/WiSaGaN/simple-error.svg?branch=master)](https://travis-ci.org/WiSaGaN/simple-error)
 [![Coverage Status](https://coveralls.io/repos/github/WiSaGaN/simple-error/badge.svg?branch=master)](https://coveralls.io/github/WiSaGaN/simple-error?branch=master)
-[![MSRV](https://img.shields.io/badge/simple_error-rustc_1.15+-lightgray.svg)](https://blog.rust-lang.org/2017/02/02/Rust-1.15.html)
+[![MSRV](https://img.shields.io/badge/simple_error-rustc_1.0.0+-lightgray.svg)](https://blog.rust-lang.org/2015/05/15/Rust-1.0.html)
 
 `simple-error` is a `Rust` library that provides a simple `Error` type backed by a `String`. It is best used when all you care about the error is an error string.
 
