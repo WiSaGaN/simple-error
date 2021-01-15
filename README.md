@@ -2,7 +2,7 @@
 
 [![crates.io](http://meritbadge.herokuapp.com/simple-error)](https://crates.io/crates/simple-error)
 [![Documentation](https://docs.rs/simple-error/badge.svg)](https://docs.rs/simple-error/)
-[![Build Status](https://travis-ci.org/WiSaGaN/simple-error.svg?branch=master)](https://travis-ci.org/WiSaGaN/simple-error)
+[![Build Status](https://github.com/wisagan/simple-error/workflows/ci/badge.svg)](https://github.com/WiSaGaN/simple-error/actions?query=workflow%3Aci)
 [![Coverage Status](https://coveralls.io/repos/github/WiSaGaN/simple-error/badge.svg?branch=master)](https://coveralls.io/github/WiSaGaN/simple-error?branch=master)
 [![MSRV](https://img.shields.io/badge/simple_error-rustc_1.0.0+-lightgray.svg)](https://blog.rust-lang.org/2015/05/15/Rust-1.0.html)
 
