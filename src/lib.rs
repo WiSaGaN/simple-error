@@ -116,10 +116,6 @@ impl fmt::Display for SimpleError {
 }
 
 impl std::error::Error for SimpleError {
-    #[inline]
-    fn description(&self) -> &str {
-        &self.err
-    }
 }
 
 /// Result type in which the error is a simple error
@@ -161,7 +157,7 @@ pub type SimpleResult<T> = Result<T, SimpleError>;
 ///
 /// // Use a format string to a boxed error
 ///
-/// fn try_block_format_to_box_error(result: Result<(), SimpleError>, s: &str) -> Result<(), Box<Error>> {
+/// fn try_block_format_to_box_error(result: Result<(), SimpleError>, s: &str) -> Result<(), Box<dyn Error>> {
 ///     Ok(try_with!(result, "with {}", s))
 /// }
 /// # }
@@ -218,7 +214,7 @@ macro_rules! try_with {
 ///
 /// // Use a format string to a boxed error
 ///
-/// fn require_block_format_to_box_error(maybe: Option<()>, s: &str) -> Result<(), Box<Error>> {
+/// fn require_block_format_to_box_error(maybe: Option<()>, s: &str) -> Result<(), Box<dyn Error>> {
 ///     Ok(require_with!(maybe, "with {}", s))
 /// }
 /// # }
@@ -274,7 +270,7 @@ macro_rules! require_with {
 /// }
 ///
 /// // Use with a formatted string to a boxed error
-/// fn bail_block_format_to_box_error(s: &str) -> Result<(), Box<Error>> {
+/// fn bail_block_format_to_box_error(s: &str) -> Result<(), Box<dyn Error>> {
 ///     bail!("reason: {}", s);
 /// }
 /// # }
@@ -372,7 +368,6 @@ mod tests {
     fn new_from_string() {
         let err = SimpleError::new(String::from("an error from String"));
         assert_eq!("an error from String", format!("{}", err));
-        assert_eq!("an error from String", err.description());
     }
 
     #[test]
@@ -434,7 +429,7 @@ mod tests {
         bail!("reason: {}", s);
     }
 
-    fn bail_block_format_to_box_error(s: &str) -> Result<(), Box<Error>> {
+    fn bail_block_format_to_box_error(s: &str) -> Result<(), Box<dyn Error>> {
         bail!("reason: {}", s);
     }
 
