@@ -2,6 +2,10 @@
 
 This project roughly adheres to [Semantic Versioning](http://semver.org/). For 0.x.y releases, `x` is the major version in semver, while `y` is the minor version.
 
+## Unreleased
+
+* Upgrade MSRV to 1.58.0
+
 ## 0.2.3 - 2021-01-14
 
 * Add convenience macro `map_err_with`
