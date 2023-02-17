@@ -5,6 +5,7 @@ This project roughly adheres to [Semantic Versioning](http://semver.org/). For 0
 ## Unreleased
 
 * Upgrade MSRV to 1.58.0
+* Upgrade to 2021 edition
 
 ## 0.2.3 - 2021-01-14
 
