@@ -59,7 +59,7 @@ impl SimpleError {
     /// ```
     #[inline]
     pub fn from<T: std::error::Error>(t: T) -> SimpleError {
-        SimpleError{ err: format!("{}", t) }
+        SimpleError{ err: format!("{t}") }
     }
 
     /// Creates a new simple error from a string with another error.
@@ -79,7 +79,7 @@ impl SimpleError {
     /// ```
     #[inline]
     pub fn with<T: std::error::Error>(s: &str, t: T) -> SimpleError {
-        SimpleError{ err: format!("{}, {}", s, t) }
+        SimpleError{ err: format!("{s}, {t}") }
     }
 
     /// Extracts a string slice describing the error.
@@ -388,13 +388,13 @@ mod tests {
     #[test]
     fn new_from_string() {
         let err = SimpleError::new(String::from("an error from String"));
-        assert_eq!("an error from String", format!("{}", err));
+        assert_eq!("an error from String", format!("{err}"));
     }
 
     #[test]
     fn new_from_str() {
         let err = SimpleError::new("an error from str");
-        assert_eq!("an error from str", format!("{}", err));
+        assert_eq!("an error from str", format!("{err}"));
     }
 
     #[test]
@@ -413,7 +413,7 @@ mod tests {
     #[test]
     fn from_io_error() {
         let err = SimpleError::from(io::Error::new(io::ErrorKind::Other, "oh no"));
-        assert_eq!("oh no", format!("{}", err));
+        assert_eq!("oh no", format!("{err}"));
     }
 
     fn try_block(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
