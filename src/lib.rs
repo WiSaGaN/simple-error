@@ -170,7 +170,7 @@ macro_rules! try_with {
             return Err(::std::convert::From::from($crate::SimpleError::with($str.as_ref(), err)));
         },
     });
-    ($expr: expr, $fmt:expr, $($arg:tt)+) => (match $expr {
+    ($expr: expr, $fmt:literal, $($arg:tt)+) => (match $expr {
         Ok(val) => val,
         Err(err) => {
             return Err(::std::convert::From::from($crate::SimpleError::with(&format!($fmt, $($arg)+), err)));
@@ -227,7 +227,7 @@ macro_rules! require_with {
             return Err(::std::convert::From::from($crate::SimpleError::new(::std::convert::AsRef::<str>::as_ref($str))));
         },
     });
-    ($expr: expr, $fmt:expr, $($arg:tt)+) => (match $expr {
+    ($expr: expr, $fmt:literal, $($arg:tt)+) => (match $expr {
         Some(val) => val,
         None => {
             return Err(::std::convert::From::from($crate::SimpleError::new(format!($fmt, $($arg)+))));
@@ -280,7 +280,7 @@ macro_rules! bail {
     ($e:expr) => {
         return Err(::std::convert::From::from($e));
     };
-    ($fmt:expr, $($arg:tt)+) => {
+    ($fmt:literal, $($arg:tt)+) => {
         return Err(::std::convert::From::from($crate::SimpleError::new(format!($fmt, $($arg)+))));
     };
 }
@@ -312,7 +312,7 @@ macro_rules! simple_error {
     ($e:expr) => {
         $crate::SimpleError::new($e)
     };
-    ($fmt:expr, $($arg:tt)+) => {
+    ($fmt:literal, $($arg:tt)+) => {
         $crate::SimpleError::new(format!($fmt, $($arg)+))
     };
 }
@@ -344,7 +344,7 @@ macro_rules! map_err_with {
     ($r: expr, $str: expr) => {
         $r.map_err(|e| $crate::SimpleError::with($str.as_ref(), e))
     };
-    ($r: expr, $fmt:expr, $($arg:tt)+) => {
+    ($r: expr, $fmt:literal, $($arg:tt)+) => {
         $r.map_err(|e| $crate::SimpleError::with(&format!($fmt, $($arg)+), e))
     };
 }
