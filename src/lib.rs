@@ -164,6 +164,12 @@ pub type SimpleResult<T> = Result<T, SimpleError>;
 /// ```
 #[macro_export]
 macro_rules! try_with {
+    ($expr: expr, $fmt:literal) => (match $expr {
+        Ok(val) => val,
+        Err(err) => {
+            return Err(::std::convert::From::from($crate::SimpleError::with(&format!($fmt), err)));
+        },
+    });
     ($expr: expr, $str: expr) => (match $expr {
         Ok(val) => val,
         Err(err) => {
@@ -221,6 +227,12 @@ macro_rules! try_with {
 /// ```
 #[macro_export]
 macro_rules! require_with {
+    ($expr: expr, $fmt:literal) => (match $expr {
+        Some(val) => val,
+        None => {
+            return Err(::std::convert::From::from($crate::SimpleError::new(format!($fmt))));
+        },
+    });
     ($expr: expr, $str: expr) => (match $expr {
         Some(val) => val,
         None => {
@@ -277,6 +289,9 @@ macro_rules! require_with {
 /// ```
 #[macro_export]
 macro_rules! bail {
+    ($fmt:literal) => {
+        return Err(::std::convert::From::from($crate::SimpleError::new(format!($fmt))));
+    };
     ($e:expr) => {
         return Err(::std::convert::From::from($e));
     };
@@ -309,6 +324,9 @@ macro_rules! bail {
 /// ```
 #[macro_export]
 macro_rules! simple_error {
+    ($fmt:literal) => {
+        $crate::SimpleError::new(format!($fmt))
+    };
     ($e:expr) => {
         $crate::SimpleError::new($e)
     };
@@ -341,6 +359,9 @@ macro_rules! simple_error {
 /// ```
 #[macro_export]
 macro_rules! map_err_with {
+    ($r: expr, $fmt:literal) => {
+        $r.map_err(|e| $crate::SimpleError::with(&format!($fmt), e))
+    };
     ($r: expr, $str: expr) => {
         $r.map_err(|e| $crate::SimpleError::with($str.as_ref(), e))
     };
@@ -377,6 +398,19 @@ mod tests {
     }
 
     #[test]
+    fn new_from_simple_error_macro() {
+        let err = SimpleError::new("an error from str");
+        assert_eq!(SimpleError::new("an error from str"), simple_error!("{err}"));
+    }
+
+    #[test]
+    fn map_error_with_macro() {
+        let err = crate::SimpleResult::<()>::Err(SimpleError::new("an error from str"));
+        let additional_reason = "error in current function";
+        assert_eq!(Err(SimpleError::new("error in current function, an error from str")), map_err_with!(err, "{additional_reason}"));
+    }
+
+    #[test]
     fn from_io_error() {
         let err = SimpleError::from(io::Error::new(io::ErrorKind::Other, "oh no"));
         assert_eq!("oh no", format!("{}", err));
@@ -390,11 +424,16 @@ mod tests {
         Ok(try_with!(result, "with {}", s))
     }
 
+    fn try_block_format_with_capture(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
+        Ok(try_with!(result, "with {s}"))
+    }
+
     #[test]
     fn macro_try_with() {
         assert_eq!(Ok(()), try_block(Ok(()), ""));
         assert_eq!(Err(SimpleError::new("try block error, error foo")), try_block(Err(SimpleError::new("error foo")), "try block error"));
         assert_eq!(Err(SimpleError::new("with try block error, error foo")), try_block_format(Err(SimpleError::new("error foo")), "try block error"));
+        assert_eq!(Err(SimpleError::new("with try block error, error foo")), try_block_format_with_capture(Err(SimpleError::new("error foo")), "try block error"));
     }
 
     fn require_block(option: Option<()>, s: &str) -> Result<(), SimpleError> {
@@ -409,12 +448,17 @@ mod tests {
         Ok(require_with!(maybe, "with {}", s))
     }
 
+    fn require_block_format_with_capture(maybe: Option<()>, s: &str) -> Result<(), SimpleError> {
+        Ok(require_with!(maybe, "with {s}"))
+    }
+
     #[test]
     fn macro_require_with() {
         assert_eq!(Ok(()), require_block(Some(()), ""));
         assert_eq!(Err(SimpleError::new("require block error")), require_block(None, "require block error"));
         assert_eq!(Err(SimpleError::new("require block error")), require_block_str_as_ref(None, &"require block error".to_owned()));
         assert_eq!(Err(SimpleError::new("with require block error")), require_block_format(None, "require block error"));
+        assert_eq!(Err(SimpleError::new("with require block error")), require_block_format_with_capture(None, "require block error"));
     }
 
     fn bail_block_into(es: ErrorSeed) -> Result<(), SimpleError> {
@@ -429,6 +473,10 @@ mod tests {
         bail!("reason: {}", s);
     }
 
+    fn bail_block_format_with_capture(s: &str) -> Result<(), SimpleError> {
+        bail!("reason: {s}");
+    }
+
     fn bail_block_format_to_box_error(s: &str) -> Result<(), Box<dyn Error>> {
         bail!("reason: {}", s);
     }
@@ -439,5 +487,10 @@ mod tests {
         assert_eq!(Err(SimpleError::new("no reason")), bail_block_str("no reason"));
         assert_eq!(Err(SimpleError::new("reason: plane crashed")), bail_block_format("plane crashed"));
         assert!(bail_block_format_to_box_error("plane crashed").is_err());
+    }
+
+    #[test]
+    fn inline_format_arg_capture() {
+        assert_eq!(Err(SimpleError::new("reason: plane crashed")), bail_block_format_with_capture("plane crashed"));
     }
 }
