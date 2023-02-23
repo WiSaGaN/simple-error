@@ -2,10 +2,11 @@
 
 This project roughly adheres to [Semantic Versioning](http://semver.org/). For 0.x.y releases, `x` is the major version in semver, while `y` is the minor version.
 
-## Unreleased
+## 0.3.0 - 2023-02-23
 
 * Upgrade MSRV to 1.58.0
 * Upgrade to 2021 edition
+* Support inline format args capture
 
 ## 0.2.3 - 2021-01-14
 
