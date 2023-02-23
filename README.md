@@ -1,6 +1,6 @@
 # simple-error
 
-[![crates.io](http://meritbadge.herokuapp.com/simple-error)](https://crates.io/crates/simple-error)
+[![crates.io](https://img.shields.io/crates/v/simple-error.svg)](https://crates.io/crates/simple-error)
 [![Documentation](https://docs.rs/simple-error/badge.svg)](https://docs.rs/simple-error/)
 [![Build Status](https://github.com/wisagan/simple-error/workflows/ci/badge.svg)](https://github.com/WiSaGaN/simple-error/actions?query=workflow%3Aci)
 [![Coverage Status](https://coveralls.io/repos/github/WiSaGaN/simple-error/badge.svg?branch=master)](https://coveralls.io/github/WiSaGaN/simple-error?branch=master)
