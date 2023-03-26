@@ -16,7 +16,7 @@ To use `simple-error`, first add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-simple-error = "0.2"
+simple-error = "0.3"
 ```
 
 Then add this to your crate root:
