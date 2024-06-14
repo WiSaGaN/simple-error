@@ -16,7 +16,7 @@ use std::fmt;
 /// A type that represents a simple error.
 ///
 /// This type uses a `String` to store the error string, and it implements `std::error::Error`.
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct SimpleError {
     err: String,
 }
