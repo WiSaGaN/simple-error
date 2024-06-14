@@ -5,6 +5,7 @@ This project roughly adheres to [Semantic Versioning](http://semver.org/). For 0
 ## Unreleased
 
 * Derive Hash, Ord, PartialOrd for SimpleError
+* Add rust-version field to Cargo.toml with 1.58.0
 
 ## 0.3.0 - 2023-02-23
 
