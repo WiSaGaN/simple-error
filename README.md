@@ -83,3 +83,12 @@ fn main() {
 }
 // This prints out "cannot watch tv, tv remote not found, failed to open remote file, Text file busy" if the error is text file busy.
 ```
+
+You can also ensure a condition holds and early-return a `SimpleError` if it does not:
+
+```rust
+fn check_config(is_valid: bool) -> Result<(), SimpleError> {
+    ensure_with!(is_valid, "invalid config");
+    Ok(())
+}
+```
