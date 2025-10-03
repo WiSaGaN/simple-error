@@ -101,7 +101,7 @@ impl SimpleError {
 // TODO: implement From<T> where T: std::error::Error when specialization lands, and remove
 // inherent from function.
 
-impl<'a> From<&'a str> for SimpleError {
+impl From<&str> for SimpleError {
     #[inline]
     fn from(s: &str) -> SimpleError {
         SimpleError{ err: s.into() }
@@ -417,15 +417,18 @@ mod tests {
     }
 
     fn try_block(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
-        Ok(try_with!(result, s))
+        let _: () = try_with!(result, s);
+        Ok(())
     }
 
     fn try_block_format(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
-        Ok(try_with!(result, "with {}", s))
+        let _: () = try_with!(result, "with {}", s);
+        Ok(())
     }
 
     fn try_block_format_with_capture(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
-        Ok(try_with!(result, "with {s}"))
+        let _: () = try_with!(result, "with {s}");
+        Ok(())
     }
 
     #[test]
@@ -437,19 +440,23 @@ mod tests {
     }
 
     fn require_block(option: Option<()>, s: &str) -> Result<(), SimpleError> {
-        Ok(require_with!(option, s))
+        let _: () = require_with!(option, s);
+        Ok(())
     }
 
     fn require_block_str_as_ref(option: Option<()>, s: &String) -> Result<(), SimpleError> {
-        Ok(require_with!(option, s))
+        let _: () = require_with!(option, s);
+        Ok(())
     }
 
     fn require_block_format(maybe: Option<()>, s: &str) -> Result<(), SimpleError> {
-        Ok(require_with!(maybe, "with {}", s))
+        let _: () = require_with!(maybe, "with {}", s);
+        Ok(())
     }
 
     fn require_block_format_with_capture(maybe: Option<()>, s: &str) -> Result<(), SimpleError> {
-        Ok(require_with!(maybe, "with {s}"))
+        let _: () = require_with!(maybe, "with {s}");
+        Ok(())
     }
 
     #[test]
