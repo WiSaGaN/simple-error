@@ -1,11 +1,11 @@
 #![doc(html_logo_url = "https://www.rust-lang.org/logos/rust-logo-128x128-blk-v2.png",
        html_favicon_url = "https://www.rust-lang.org/favicon.ico",
-       html_root_url = "https://wisagan.github.io/simple-error/simple_error/")]
+       html_root_url = "https://docs.rs/simple-error")]
 #![deny(missing_docs)]
 //! A simple error type backed by a string.
 //!
-//! This crate provides a `SimpleError` type, which implements `std::error::Error`. The underlying
-//! is a `String` as the error message.
+//! This crate provides a `SimpleError` type, which implements `std::error::Error`.
+//! The underlying type is a `String` used as the error message.
 //!
 //! It should be used when all you care about is an error string.
 //!
@@ -29,7 +29,7 @@ impl SimpleError {
     /// # Examples
     ///
     /// ```
-    /// use self::simple_error::SimpleError;
+    /// use simple_error::SimpleError;
     ///
     /// // errors can be created from `str`
     /// let err = SimpleError::new("an error from str");
@@ -50,7 +50,7 @@ impl SimpleError {
     /// # Examples
     ///
     /// ```
-    /// use self::simple_error::SimpleError;
+    /// use simple_error::SimpleError;
     /// use std::io;
     ///
     /// // errors can be created from `io::Error`
@@ -72,7 +72,7 @@ impl SimpleError {
     /// # Examples
     ///
     /// ```
-    /// use self::simple_error::SimpleError;
+    /// use simple_error::SimpleError;
     ///
     /// let err = SimpleError::with("cannot turn on tv", SimpleError::new("remote not found"));
     /// assert_eq!("cannot turn on tv, remote not found", format!("{}", err));
@@ -87,7 +87,7 @@ impl SimpleError {
     /// # Examples
     ///
     /// ```
-    /// use self::simple_error::SimpleError;
+    /// use simple_error::SimpleError;
     ///
     /// let s = SimpleError::new("critical error");
     /// assert_eq!("critical error", s.as_str());
@@ -123,16 +123,16 @@ pub type SimpleResult<T> = Result<T, SimpleError>;
 
 /// Helper macro for unwrapping `Result` values while returning early with a
 /// newly constructed `SimpleError` if the value of the expression is `Err`.
-/// Can only be used in functions that return `Result<_, SimpleError>`.
+/// Can be used in functions that return `Result<_, E>` where `E: From<SimpleError>`
+/// (e.g. `SimpleError` or `Box<dyn Error>`).
 ///
 ///
 /// # Examples
 ///
-/// ```
-/// # #[macro_use] extern crate simple_error;
-/// # fn main() {
-/// use self::simple_error::SimpleError;
-/// use std::error::Error;
+    /// ```
+    /// # fn main() {
+    /// use simple_error::{SimpleError, try_with};
+    /// use std::error::Error;
 ///
 /// fn try_block(result: Result<(), SimpleError>, s: &str) -> Result<(), SimpleError> {
 ///     Ok(try_with!(result, s))
@@ -186,16 +186,16 @@ macro_rules! try_with {
 
 /// Helper macro for unwrapping `Option` values while returning early with a
 /// newly constructed `SimpleError` if the value of the expression is `None`.
-/// Can only be used in functions that return `Result<_, SimpleError>`.
+/// Can be used in functions that return `Result<_, E>` where `E: From<SimpleError>`
+/// (e.g. `SimpleError` or `Box<dyn Error>`).
 ///
 ///
 /// # Examples
 ///
-/// ```
-/// # #[macro_use] extern crate simple_error;
-/// # fn main() {
-/// use self::simple_error::SimpleError;
-/// use std::error::Error;
+    /// ```
+    /// # fn main() {
+    /// use simple_error::{SimpleError, require_with};
+    /// use std::error::Error;
 ///
 /// fn require_block(maybe: Option<()>, s: &str) -> Result<(), SimpleError> {
 ///     Ok(require_with!(maybe, s))
@@ -249,15 +249,15 @@ macro_rules! require_with {
 
 /// Helper macro for ensuring a boolean condition while returning early with a
 /// newly constructed `SimpleError` if the condition is `false`.
-/// Can only be used in functions that return `Result<_, SimpleError>`.
+/// Can be used in functions that return `Result<_, E>` where `E: From<SimpleError>`
+/// (e.g. `SimpleError` or `Box<dyn Error>`).
 ///
 /// # Examples
 ///
-/// ```
-/// # #[macro_use] extern crate simple_error;
-/// # fn main() {
-/// use self::simple_error::SimpleError;
-/// use std::error::Error;
+    /// ```
+    /// # fn main() {
+    /// use simple_error::{SimpleError, ensure_with};
+    /// use std::error::Error;
 ///
 /// fn ensure_block(cond: bool, s: &str) -> Result<(), SimpleError> {
 ///     ensure_with!(cond, s);
@@ -310,11 +310,10 @@ macro_rules! ensure_with {
 ///
 /// # Examples
 ///
-/// ```
-/// # #[macro_use] extern crate simple_error;
-/// # fn main() {
-/// use self::simple_error::SimpleError;
-/// use std::error::Error;
+    /// ```
+    /// # fn main() {
+    /// use simple_error::{SimpleError, bail};
+    /// use std::error::Error;
 /// // Use with a `Into<SimpleError>`
 ///
 /// struct ErrorSeed;
@@ -364,10 +363,9 @@ macro_rules! bail {
 ///
 /// # Example
 ///
-/// ```
-/// # #[macro_use] extern crate simple_error;
-/// # fn main() {
-/// use self::simple_error::SimpleResult;
+    /// ```
+    /// # fn main() {
+    /// use simple_error::{SimpleResult, simple_error};
 ///
 /// fn add_reason(r: Result<(), ()>) -> SimpleResult<()> {
 ///     // Use with a string slice
@@ -399,10 +397,9 @@ macro_rules! simple_error {
 ///
 /// # Example
 ///
-/// ```
-/// # #[macro_use] extern crate simple_error;
-/// # fn main() {
-/// use self::simple_error::SimpleResult;
+    /// ```
+    /// # fn main() {
+    /// use simple_error::{SimpleResult, map_err_with};
 ///
 /// fn map_err_with_reason(r: Result<(), std::io::Error>) -> SimpleResult<()> {
 ///     // Use with a string slice
