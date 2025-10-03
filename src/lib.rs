@@ -247,6 +247,64 @@ macro_rules! require_with {
     });
 }
 
+/// Helper macro for ensuring a boolean condition while returning early with a
+/// newly constructed `SimpleError` if the condition is `false`.
+/// Can only be used in functions that return `Result<_, SimpleError>`.
+///
+/// # Examples
+///
+/// ```
+/// # #[macro_use] extern crate simple_error;
+/// # fn main() {
+/// use self::simple_error::SimpleError;
+/// use std::error::Error;
+///
+/// fn ensure_block(cond: bool, s: &str) -> Result<(), SimpleError> {
+///     ensure_with!(cond, s);
+///     Ok(())
+/// }
+///
+/// // Above is equivalent to below.
+///
+/// fn ensure_block_equivalent(cond: bool, s: &str) -> Result<(), SimpleError> {
+///     if !cond {
+///         return Err(SimpleError::new(s));
+///     }
+///     Ok(())
+/// }
+///
+/// // Use a format string
+/// fn ensure_block_format(cond: bool, s: &str) -> Result<(), SimpleError> {
+///     ensure_with!(cond, "with {}", s);
+///     Ok(())
+/// }
+///
+/// // Use a format string to a boxed error
+/// fn ensure_block_format_to_box_error(cond: bool, s: &str) -> Result<(), Box<dyn Error>> {
+///     ensure_with!(cond, "with {}", s);
+///     Ok(())
+/// }
+/// # }
+/// ```
+#[macro_export]
+macro_rules! ensure_with {
+    ($cond: expr, $fmt:literal) => ({
+        if !$cond {
+            return Err(::std::convert::From::from($crate::SimpleError::new(format!($fmt))));
+        }
+    });
+    ($cond: expr, $str: expr) => ({
+        if !$cond {
+            return Err(::std::convert::From::from($crate::SimpleError::new(::std::convert::AsRef::<str>::as_ref($str))));
+        }
+    });
+    ($cond: expr, $fmt:literal, $($arg:tt)+) => ({
+        if !$cond {
+            return Err(::std::convert::From::from($crate::SimpleError::new(format!($fmt, $($arg)+))));
+        }
+    });
+}
+
 /// Helper macro for returning a `SimpleError` constructed from either a `Into<SimpleError>`, a
 /// string slice, or a formatted string.
 ///
@@ -466,6 +524,41 @@ mod tests {
         assert_eq!(Err(SimpleError::new("require block error")), require_block_str_as_ref(None, &"require block error".to_owned()));
         assert_eq!(Err(SimpleError::new("with require block error")), require_block_format(None, "require block error"));
         assert_eq!(Err(SimpleError::new("with require block error")), require_block_format_with_capture(None, "require block error"));
+    }
+
+    fn ensure_block(cond: bool, s: &str) -> Result<(), SimpleError> {
+        ensure_with!(cond, s);
+        Ok(())
+    }
+
+    fn ensure_block_str_as_ref(cond: bool, s: &String) -> Result<(), SimpleError> {
+        ensure_with!(cond, s);
+        Ok(())
+    }
+
+    fn ensure_block_format(cond: bool, s: &str) -> Result<(), SimpleError> {
+        ensure_with!(cond, "with {}", s);
+        Ok(())
+    }
+
+    fn ensure_block_format_with_capture(cond: bool, s: &str) -> Result<(), SimpleError> {
+        ensure_with!(cond, "with {s}");
+        Ok(())
+    }
+
+    fn ensure_block_format_to_box_error(cond: bool, s: &str) -> Result<(), Box<dyn Error>> {
+        ensure_with!(cond, "with {}", s);
+        Ok(())
+    }
+
+    #[test]
+    fn macro_ensure_with() {
+        assert_eq!(Ok(()), ensure_block(true, ""));
+        assert_eq!(Err(SimpleError::new("ensure block error")), ensure_block(false, "ensure block error"));
+        assert_eq!(Err(SimpleError::new("ensure block error")), ensure_block_str_as_ref(false, &"ensure block error".to_owned()));
+        assert_eq!(Err(SimpleError::new("with ensure block error")), ensure_block_format(false, "ensure block error"));
+        assert_eq!(Err(SimpleError::new("with ensure block error")), ensure_block_format_with_capture(false, "ensure block error"));
+        assert!(ensure_block_format_to_box_error(false, "ensure block error").is_err());
     }
 
     fn bail_block_into(es: ErrorSeed) -> Result<(), SimpleError> {

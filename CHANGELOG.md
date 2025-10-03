@@ -2,6 +2,10 @@
 
 This project roughly adheres to [Semantic Versioning](http://semver.org/). For 0.x.y releases, `x` is the major version in semver, while `y` is the minor version.
 
+## Unreleased
+
+* Add convenience macro `ensure_with` for boolean condition checks
+
 ## 0.3.1 - 2024-06-19
 
 * Derive Hash, Ord, PartialOrd for SimpleError
