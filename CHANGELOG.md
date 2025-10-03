@@ -2,9 +2,10 @@
 
 This project roughly adheres to [Semantic Versioning](http://semver.org/). For 0.x.y releases, `x` is the major version in semver, while `y` is the minor version.
 
-## Unreleased
+## 0.3.2 - 2025-10-03
 
 * Add convenience macro `ensure_with` for boolean condition checks
+* Update documentation to modern Rust 2018/2021 standards
 
 ## 0.3.1 - 2024-06-19
 
