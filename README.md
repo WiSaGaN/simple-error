@@ -19,16 +19,12 @@ To use `simple-error`, first add this to your `Cargo.toml`:
 simple-error = "0.3"
 ```
 
-Then add this to your crate root:
+Then import what you use (Rust 2018/2021):
 
 ```rust
-#[macro_use]
-extern crate simple_error;
-
-use simple_error::SimpleError;
+use simple_error::{SimpleError, try_with};
+// Add others as needed: require_with, ensure_with, bail, simple_error, map_err_with
 ```
-
-Or you can skip the `extern crate` and just import relevant items you use if you are on 2018 edition or beyond.
 
 Now you can use `simple-error` in different ways:
 
@@ -44,7 +40,7 @@ You can use it to replace all error types if you only care about a string descri
 
 ```rust
 fn do_bar() -> Result<(), SimpleError> {
-    Err(SimpleError::from(std::io::Error(io::ErrorKind::Other, "oh no")))
+    Err(SimpleError::from(std::io::Error::new(std::io::ErrorKind::Other, "oh no")))
 }
 ```
 
@@ -87,8 +83,19 @@ fn main() {
 You can also ensure a condition holds and early-return a `SimpleError` if it does not:
 
 ```rust
+use simple_error::{SimpleError, ensure_with};
+
 fn check_config(is_valid: bool) -> Result<(), SimpleError> {
     ensure_with!(is_valid, "invalid config");
     Ok(())
 }
 ```
+
+## Macros
+
+- `try_with!` — unwrap `Result`, else return `SimpleError::with`.
+- `require_with!` — unwrap `Option`, else return `SimpleError::new`.
+- `ensure_with!` — assert boolean, else return `SimpleError::new`.
+- `bail!` — return early with a `SimpleError` (supports format/expr).
+- `simple_error!` — construct a `SimpleError` (supports format/expr).
+- `map_err_with!` — map a `Result`’s error with extra context.
