@@ -347,13 +347,13 @@ macro_rules! ensure_with {
 #[macro_export]
 macro_rules! bail {
     ($fmt:literal) => {
-        return Err(::std::convert::From::from($crate::SimpleError::new(format!($fmt))));
+        return Err(::std::convert::From::from($crate::SimpleError::new(format!($fmt))))
     };
     ($e:expr) => {
-        return Err(::std::convert::From::from($e));
+        return Err(::std::convert::From::from($e))
     };
     ($fmt:literal, $($arg:tt)+) => {
-        return Err(::std::convert::From::from($crate::SimpleError::new(format!($fmt, $($arg)+))));
+        return Err(::std::convert::From::from($crate::SimpleError::new(format!($fmt, $($arg)+))))
     };
 }
 
@@ -578,12 +578,25 @@ mod tests {
         bail!("reason: {}", s);
     }
 
+    fn bail_match_arm(n: u8) -> Result<u8, SimpleError> {
+        match n {
+            0 => bail!("zero"),
+            1 => bail!("reason: {}", n),
+            2 => bail!(ErrorSeed),
+            n => Ok(n),
+        }
+    }
+
     #[test]
     fn macro_bail() {
         assert_eq!(Err(SimpleError::new(".")), bail_block_into(ErrorSeed));
         assert_eq!(Err(SimpleError::new("no reason")), bail_block_str("no reason"));
         assert_eq!(Err(SimpleError::new("reason: plane crashed")), bail_block_format("plane crashed"));
         assert!(bail_block_format_to_box_error("plane crashed").is_err());
+        assert_eq!(Err(SimpleError::new("zero")), bail_match_arm(0));
+        assert_eq!(Err(SimpleError::new("reason: 1")), bail_match_arm(1));
+        assert_eq!(Err(SimpleError::new(".")), bail_match_arm(2));
+        assert_eq!(Ok(3), bail_match_arm(3));
     }
 
     #[test]

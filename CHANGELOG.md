@@ -2,6 +2,10 @@
 
 This project roughly adheres to [Semantic Versioning](http://semver.org/). For 0.x.y releases, `x` is the major version in semver, while `y` is the minor version.
 
+## Unreleased
+
+* Fix `bail` in expression position, such as a match arm, which newer compilers warn about
+
 ## 0.3.2 - 2025-10-03
 
 * Add convenience macro `ensure_with` for boolean condition checks
