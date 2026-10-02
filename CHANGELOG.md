@@ -2,7 +2,7 @@
 
 This project roughly adheres to [Semantic Versioning](http://semver.org/). For 0.x.y releases, `x` is the major version in semver, while `y` is the minor version.
 
-## Unreleased
+## 0.3.3 - 2026-10-02
 
 * Fix `bail` in expression position, such as a match arm, which newer compilers warn about
 
